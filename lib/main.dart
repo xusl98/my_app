@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
 import 'package:my_app/resources/themeColors.dart';
 import 'package:my_app/screens/register.dart';
+import 'package:my_app/screens/welcome.dart';
+import 'package:my_app/services/userService.dart';
 
-void main() {
+Future<void> main() async {
+  // WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
+  // await FlutterConfig.loadEnvVariables();
   runApp(MyApp());
 }
 
@@ -10,12 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LoginScreen(),
+      home: WelcomeScreen(),
     );
   }
 }
 
 class LoginScreen extends StatelessWidget {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,9 +37,12 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.0),
             TextField(
+              controller: emailController,
               decoration: InputDecoration(labelText: 'Email'),
             ),
             TextField(
+              controller: passwordController,
+              obscureText: true,
               decoration: InputDecoration(labelText: 'Contraseña'),
             ),
             SizedBox(height: 10.0),
@@ -50,7 +60,16 @@ class LoginScreen extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  // Handle login action
+                  String email = emailController.text;
+                  String password = passwordController.text;
+
+                  loginUser(email, password);
+
+                  // Make the POST request to the API
+                  // Use the email and password variables in the request
+
+                  // Example API call:
+                  // myApi.postLogin(email, password);
                 },
                 style: ElevatedButton.styleFrom(
                   primary: ThemeColors.buttonBackgroundColor,
@@ -60,11 +79,11 @@ class LoginScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.0),
             Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('¿Aún no tienes cuenta?'),
-                ],
-              ),
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('¿Aún no tienes cuenta?'),
+              ],
+            ),
             GestureDetector(
               onTap: () {
                 // Navigate to RegisterScreen
