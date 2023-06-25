@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/screens/register.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'home.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -12,7 +14,8 @@ class WelcomeScreen extends StatelessWidget {
             child: Align(
               alignment: Alignment.center,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 80), // Adjust the height of the text
+                padding: EdgeInsets.only(
+                    bottom: 80), // Adjust the height of the text
                 child: Text(
                   'Golf Clapp',
                   style: TextStyle(
@@ -30,13 +33,27 @@ class WelcomeScreen extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  // Retrieve data
+                  SharedPreferences prefs =
+                      await SharedPreferences.getInstance();
+                  String? apiKey = prefs.getString('apiKey');
+                  print(apiKey);
+                  if (apiKey != null && apiKey != '') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => RegisterScreen(),
                     ),
                   );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   primary: Colors.black, // Set button background color to black

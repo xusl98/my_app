@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../resources/themeColors.dart';
 import '../services/userService.dart';
+
+import 'home.dart';
+import 'login.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -24,7 +25,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Wrap RegisterScreen with Scaffold
       body: Padding(
         padding: EdgeInsets.only(top: 80, bottom: 16, left: 16, right: 16),
         child: Column(
@@ -99,10 +99,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
               obscureText: true,
             ),
             SizedBox(height: 20),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginScreen(),
+                  ),
+                );
+              },
+              child: Text(
+                "Ya tengo una cuenta",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
             CheckboxListTile(
               title: Text(
-                  "Acepto a recibir comunicaciones comerciales con ofertas que puedan ser de mi interés procedentes de terceras empresas con las que Golf clap haya llegado a un acuerdo comercial.",
-                  style: TextStyle(fontSize: 13)),
+                "Acepto a recibir comunicaciones comerciales con ofertas que puedan ser de mi interés procedentes de terceras empresas con las que Golf clap haya llegado a un acuerdo comercial.",
+                style: TextStyle(fontSize: 13),
+              ),
               value: checkedInfo,
               onChanged: (newValue) {
                 setState(() {
@@ -113,8 +131,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             ),
             CheckboxListTile(
               title: Text(
-                  "Estoy de acuerdo con los Términos y Condiciones y Política de Privacidad.",
-                  style: TextStyle(fontSize: 13)),
+                "Estoy de acuerdo con los Términos y Condiciones y Política de Privacidad.",
+                style: TextStyle(fontSize: 13),
+              ),
               value: checkedTerms,
               onChanged: (newValue) {
                 setState(() {
@@ -124,7 +143,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               controlAffinity: ListTileControlAffinity.leading,
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
                 String name = nameController.text;
                 String surname = surnameController.text;
                 String userName = userNameController.text;
@@ -145,10 +164,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 print('Checked Info: $checkedInfo');
                 print('Checked Terms: $checkedTerms');
                 if (checkedTerms) {
-                  //TODO añadir selector de pais
-                  registerUser(name, surname, userName, licenseNumber, email, phone, password, "ES");
+                  // TODO: Añadir selector de país
+                  bool registered = await registerUser(
+                    name,
+                    surname,
+                    userName,
+                    licenseNumber,
+                    email,
+                    phone,
+                    password,
+                    "ES",
+                  );
+                  if (registered) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    );
+                  }
                 } else {
-                  //TODO tell user he has to accept the terms of use
+                  // TODO: Indicar al usuario que debe aceptar los términos de uso
                 }
               },
               child: Text('Finalizar'),

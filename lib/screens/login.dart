@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_config/flutter_config.dart';
 import 'package:my_app/resources/themeColors.dart';
 import 'package:my_app/screens/register.dart';
 import 'package:my_app/services/userService.dart';
+
+import 'home.dart';
 
 
 
@@ -45,11 +46,19 @@ class LoginScreen extends StatelessWidget {
             Container(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   String email = emailController.text;
                   String password = passwordController.text;
 
-                  loginUser(email, password);
+                  bool loggedIn = await loginUser(email, password);
+                  if (loggedIn){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => HomeScreen(),
+                      ),
+                    );
+                  }
 
                   // Make the POST request to the API
                   // Use the email and password variables in the request

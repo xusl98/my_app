@@ -1,13 +1,21 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_config/flutter_config.dart';
 import 'package:my_app/resources/themeColors.dart';
 import 'package:my_app/screens/register.dart';
 import 'package:my_app/screens/welcome.dart';
 import 'package:my_app/services/userService.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
-  // WidgetsFlutterBinding.ensureInitialized(); // Required by FlutterConfig
-  // await FlutterConfig.loadEnvVariables();
+  WidgetsFlutterBinding.ensureInitialized();
+  log('1');
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  log(DefaultFirebaseOptions.currentPlatform.toString());
+  log('2');
   runApp(MyApp());
 }
 
